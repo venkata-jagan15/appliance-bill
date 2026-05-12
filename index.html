@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <title>Energy Monitoring</title>
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#0055FF">
+</head>
+<body>
+    <div id="app">
+        <!-- Header -->
+        <header>
+            <div class="logo">
+                <i class="fas fa-bolt" style="color: var(--primary); font-size: 1.5rem;"></i>
+                <span style="font-weight: 700; margin-left: 8px;">EnergyPro</span>
+            </div>
+            <div class="theme-toggle" id="theme-toggle">
+                <i class="fas fa-moon"></i>
+            </div>
+        </header>
+
+        <!-- Main Content (Views) -->
+        <main id="main-content">
+            <!-- Appliances View -->
+            <section id="view-appliances" class="view active">
+                <div class="card">
+                    <h2>Consumer Type</h2>
+                    <div style="display: flex; gap: 10px; margin-top: 15px;">
+                        <button class="btn btn-primary consumer-btn active" data-type="domestic">Domestic</button>
+                        <button class="btn btn-secondary consumer-btn" data-type="commercial">Commercial</button>
+                        <button class="btn btn-secondary consumer-btn" data-type="industrial">Industrial</button>
+                    </div>
+                </div>
+
+                <div class="card" id="slab-info">
+                    <h3>Current Slabs (Domestic)</h3>
+                    <div style="margin-top: 10px;" id="slab-details">
+                        <!-- Slabs will be injected here -->
+                    </div>
+                </div>
+
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px;">
+                    <h2>Your Appliances</h2>
+                    <button class="btn btn-primary" id="open-add-modal">
+                        <i class="fas fa-plus"></i> Add
+                    </button>
+                </div>
+
+                <div id="appliances-list">
+                    <!-- Appliances will be listed here -->
+                    <div class="text-muted" style="text-align: center; padding: 40px;">
+                        No appliances added yet.
+                    </div>
+                </div>
+            </section>
+
+            <!-- Solar View -->
+            <section id="view-solar" class="view">
+                <h2>Solar & Net Metering</h2>
+                <div class="card" style="margin-top: 15px;">
+                    <div class="status-grid">
+                        <div class="status-card primary">
+                            <div class="text-sm">Total Consumption</div>
+                            <div style="font-size: 1.25rem; font-weight: 700;" id="stat-consumption">0 kWh</div>
+                        </div>
+                        <div class="status-card secondary">
+                            <div class="text-sm">Solar Production</div>
+                            <div style="font-size: 1.25rem; font-weight: 700;" id="stat-solar">0 kWh</div>
+                        </div>
+                        <div class="status-card dark">
+                            <div class="text-sm">Net Usage</div>
+                            <div style="font-size: 1.25rem; font-weight: 700;" id="stat-net">0 kWh</div>
+                        </div>
+                        <div class="status-card success">
+                            <div class="text-sm">Exported Units</div>
+                            <div style="font-size: 1.25rem; font-weight: 700;" id="stat-export">0 kWh</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <label style="display: block; margin-bottom: 8px; font-weight: 500;">Solar Generated (Units)</label>
+                    <input type="number" id="input-solar" class="btn btn-block" style="background: var(--grey-100); text-align: left; padding: 12px; margin-bottom: 15px;" placeholder="e.g. 150">
+                    
+                    <label style="display: block; margin-bottom: 8px; font-weight: 500;">Government Buyback Rate (₹/unit)</label>
+                    <input type="number" id="input-buyback" class="btn btn-block" style="background: var(--grey-100); text-align: left; padding: 12px;" value="3.5">
+                </div>
+            </section>
+
+            <!-- Summary View -->
+            <section id="view-summary" class="view">
+                <h2>Bill Summary</h2>
+                <div class="card" style="margin-top: 15px;">
+                    <div id="summary-details">
+                        <!-- Summary breakdown injected here -->
+                    </div>
+                    <hr style="border: none; border-top: 1px solid var(--grey-200); margin: 20px 0;">
+                    <div style="display: flex; justify-content: space-between; align-items: center;">
+                        <h3>Total Bill</h3>
+                        <h2 style="color: var(--primary);" id="total-bill-amount">₹0.00</h2>
+                    </div>
+                </div>
+                <button class="btn btn-primary btn-block" id="save-history">Save to History</button>
+            </section>
+
+            <!-- History View -->
+            <section id="view-history" class="view">
+                <h2>History</h2>
+                <div id="history-list" style="margin-top: 15px;">
+                    <!-- History items injected here -->
+                </div>
+            </section>
+        </main>
+
+        <!-- Bottom Navigation -->
+        <nav class="bottom-nav">
+            <a href="#" class="nav-item active" data-view="appliances">
+                <i class="fas fa-plug"></i>
+                <span>Appliances</span>
+            </a>
+            <a href="#" class="nav-item" data-view="solar">
+                <i class="fas fa-sun"></i>
+                <span>Solar</span>
+            </a>
+            <a href="#" class="nav-item" data-view="summary">
+                <i class="fas fa-file-invoice-dollar"></i>
+                <span>Summary</span>
+            </a>
+            <a href="#" class="nav-item" data-view="history">
+                <i class="fas fa-history"></i>
+                <span>History</span>
+            </a>
+        </nav>
+
+        <!-- Add Appliance Modal -->
+        <div class="modal-overlay" id="add-modal-overlay">
+            <div class="modal">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+                    <h2>Add Appliance</h2>
+                    <i class="fas fa-times" id="close-add-modal" style="cursor: pointer; font-size: 1.25rem;"></i>
+                </div>
+                <div style="margin-bottom: 15px;">
+                    <label style="display: block; margin-bottom: 8px;">Appliance Name / Category</label>
+                    <select id="modal-app-category" class="btn btn-block" style="background: var(--grey-100); text-align: left; padding: 12px;">
+                        <option value="ac">Air Conditioner (1.5 Ton)</option>
+                        <option value="fridge">Refrigerator</option>
+                        <option value="fan">Ceiling Fan</option>
+                        <option value="light">LED Bulb</option>
+                        <option value="tv">Television</option>
+                        <option value="custom">Custom</option>
+                    </select>
+                </div>
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-bottom: 15px;">
+                    <div>
+                        <label style="display: block; margin-bottom: 8px;">Power (Watts)</label>
+                        <input type="number" id="modal-app-watts" class="btn btn-block" style="background: var(--grey-100); text-align: left; padding: 12px;">
+                    </div>
+                    <div>
+                        <label style="display: block; margin-bottom: 8px;">Quantity</label>
+                        <input type="number" id="modal-app-qty" class="btn btn-block" style="background: var(--grey-100); text-align: left; padding: 12px;" value="1">
+                    </div>
+                </div>
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-bottom: 25px;">
+                    <div>
+                        <label style="display: block; margin-bottom: 8px;">Hours / Day</label>
+                        <input type="number" id="modal-app-hours" class="btn btn-block" style="background: var(--grey-100); text-align: left; padding: 12px;" value="5">
+                    </div>
+                    <div>
+                        <label style="display: block; margin-bottom: 8px;">Days / Month</label>
+                        <input type="number" id="modal-app-days" class="btn btn-block" style="background: var(--grey-100); text-align: left; padding: 12px;" value="30">
+                    </div>
+                </div>
+                <button class="btn btn-primary btn-block" id="add-appliance-btn">Add Appliance</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>

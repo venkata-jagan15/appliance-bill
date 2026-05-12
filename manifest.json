@@ -1,0 +1,17 @@
+{
+  "name": "EnergyPro Appliance Bill Calculator",
+  "short_name": "EnergyPro",
+  "description": "Calculate your appliance bill and solar savings.",
+  "start_url": "./index.html",
+  "display": "standalone",
+  "background_color": "#0055FF",
+  "theme_color": "#0055FF",
+  "icons": [
+    {
+      "src": "https://cdn-icons-png.flaticon.com/512/2991/2991552.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ]
+}
